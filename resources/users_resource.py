@@ -1,5 +1,7 @@
 from flask_restful import Resource,reqparse
 from models.users_model import UserModel
+from werkzeug.security import check_password_hash
+
 
 class UserResource(Resource):
     parser = reqparse.RequestParser()
@@ -29,22 +31,48 @@ class UserResource(Resource):
     )
     parser.add_argument(
         'Password',
-        type=int,
+        type=str,
         required=True,
         help='Password field is required'
     )
     def post(self):
         request_data = UserResource.parser.parse_args()
         if UserModel.find_by_user_email(request_data['Email']):
-            return {'Message': 'The email is already exist'},400
+            return {'Message': f'The {request_data["Email"]} email is already exist'},400
         user_register = UserModel(**request_data)
         try:
             user_register.save_to_db()
         except:
             return {'Message':'An Internal Server Error occurred While Register the user'},500
-        return {'Message':'Registerd Successfully.....!'}
+        return {'Message': f'Hi, {request_data["Name"]} your Registration is Successfully.....!'}
 
-    
+class UserResourceDetails(Resource):
+        def get(self,userid):
+            user_details = UserModel.find_by_user_userid(userid)
+            if user_details:
+                return user_details.json()
+            return {'Message':'User Does not exist'},400
+        
+class UserResourceLogin(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument(
+        'Email',
+        type=str,
+        required=True,
+        help='Email field is required'
+    )
+    parser.add_argument(
+        'Password',
+        type=str,
+        required=True,
+        help='Password field is required'
+    )
+    def post(self):
+        request_data = UserResourceLogin.parser.parse_args()
+        user_details = UserModel.find_by_user_email(request_data['Email'])
+        if user_details and check_password_hash(user_details.password ,request_data['Password']):
+            return {'Message': f'Welcome {user_details.name}.......'}
+        return {'Message':'Oops Login Failed....!'}
 
 
 
