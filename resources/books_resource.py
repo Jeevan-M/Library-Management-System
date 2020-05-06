@@ -24,8 +24,14 @@ class BooksResource(Resource):
     def post(self):
         requested_data = BooksResource.parser.parse_args()
         if BookModel.find_by_bookname(requested_data['BookName']):
-            return {'Message': f'The {requested_data['BookName']} is already stored in database Insted of adding the book increase the total count'}
+            return {'Message': f"The {requested_data['BookName']} is already stored in database Insted of adding the book increase the total count"}
         book_details = BookModel(**requested_data)
         book_details.save_to_db()
-        return {'Message': f'The {requested_data['BookName']} is Added Successfully to DataBase.....'}
+        return {'Message': f"The {requested_data['BookName']} is Added Successfully to DataBase....."}
 
+    def delete(self,name):
+        book_details = BookModel.find_by_bookname(name)
+        if book_details:
+            book_details.delete()
+            return {'Message':'Book deleted from the database'}
+        return {'Message':"Book Don't exist in the Database"}
