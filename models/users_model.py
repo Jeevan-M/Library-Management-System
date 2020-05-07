@@ -4,15 +4,17 @@ import random
 
 class UserModel(db_connect.Model):
     __tablename__ = "users"
-    id = db_connect.Column(db_connect.Integer,primary_key=True)
+    id = db_connect.Column(db_connect.Integer,primary_key=True,autoincrement=True)
     name = db_connect.Column(db_connect.String(40))
     email = db_connect.Column(db_connect.String(40),unique=True)
     usertype = db_connect.Column(db_connect.String(40))
     phone = db_connect.Column(db_connect.String(10))
     password = db_connect.Column(db_connect.String(100))
-    userid = db_connect.Column(db_connect.String(50),unique=True)
+    userid = db_connect.Column(db_connect.String(50),primary_key=True,autoincrement=False)
     nobookissue = db_connect.Column(db_connect.Integer)
     maxbook = db_connect.Column(db_connect.Integer)
+
+    user = db_connect.relationship('issueBook',lazy='dynamic')
 
     def __init__(self,Name,Email,Type,Phone,Password):
         self.name = Name
