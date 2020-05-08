@@ -4,13 +4,14 @@ import random
 class BookModel(db_connect.Model):
     __tablename__ = "allbooks"
     id = db_connect.Column(db_connect.Integer,primary_key=True,autoincrement=True)
-    bookid = db_connect.Column(db_connect.String(20),primary_key=True, autoincrement=False)
-    authorname = db_connect.Column(db_connect.String(40))
-    bookname = db_connect.Column(db_connect.String(40))
+    bookid = db_connect.Column(db_connect.String(45),primary_key=True, autoincrement=False,nullable=False,unique=True)
+    book = db_connect.relationship('issueBook',lazy='dynamic')
+    authorname = db_connect.Column(db_connect.String(45))
+    bookname = db_connect.Column(db_connect.String(45))
     totalbook = db_connect.Column(db_connect.Integer)
     remainingbook = db_connect.Column(db_connect.Integer)
 
-    book = db_connect.relationship('issueBook',lazy='dynamic')
+    
 
     def __init__(self,AuthorName,BookName,TotalBook):
         self.bookid = 'LMSBOOKID'+str(random.randrange(1111,9999))
