@@ -5,25 +5,25 @@ import random
 class UserModel(db_connect.Model):
     __tablename__ = "users"
     id = db_connect.Column(db_connect.Integer,nullable=False,primary_key=True,autoincrement=True)
+    userid = db_connect.Column(db_connect.String(45),nullable=False,unique=True,primary_key=True,autoincrement=False)
+    user = db_connect.relationship('issueBook',lazy='dynamic')
     name = db_connect.Column(db_connect.String(45))
     email = db_connect.Column(db_connect.String(45),unique=True)
     usertype = db_connect.Column(db_connect.String(45))
     phone = db_connect.Column(db_connect.String(45))
     password = db_connect.Column(db_connect.String(100))
-    userid = db_connect.Column(db_connect.String(45),nullable=False,unique=True,primary_key=True,autoincrement=False)
-    user = db_connect.relationship('issueBook',lazy='dynamic')
     nobookissue = db_connect.Column(db_connect.Integer)
     maxbook = db_connect.Column(db_connect.Integer)
 
     
 
     def __init__(self,Name,Email,Type,Phone,Password):
+        self.userid = 'LMSID'+str(random.randrange(1111, 9999))
         self.name = Name
         self.email = Email
         self.usertype = Type
         self.phone = Phone
         self.password = generate_password_hash(Password)
-        self.userid = 'LMSID'+str(random.randrange(1111, 9999))
         self.nobookissue = 0
         self.maxbook = 10
 
@@ -46,7 +46,7 @@ class UserModel(db_connect.Model):
     def find_by_user_userid(cls,userid):
         return cls.query.filter_by(userid=userid).first()
 
-    def save_to_db(self):
+    def saveUserToDB(self):
         db_connect.session.add(self)
         db_connect.session.commit()
     

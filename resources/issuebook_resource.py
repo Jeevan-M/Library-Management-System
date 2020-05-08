@@ -19,23 +19,31 @@ class issueBookResource(Resource):
     def post(self):
         request_data = issueBookResource.parser.parse_args()
         
+        #find the count of borrowed book by the user
         user_borrow_count = issueBook.find_user_count(request_data['LMSID'])
         if user_borrow_count >= 10:
             return {'Message' : 'You reached maximum limite to borrow this book','status':400},400
         
+        #checking the book avaliablity 
+        book_avaliable_check = BookModel.find_by_bookid(request_data['LMSBOOKID'])
+        if book_avaliable_check.totalbook == book_avaliable_check.remainingbook:
+            return {'Message' : 'Sorry Book not Avaliable','status':400},400
         
-        
+        #check the user already borrow this book
         if issueBook.borrow_status(**request_data):
             return {'Message':'This Book You Already Borrowed','status':400},400
-
-        usercheck = UserModel.find_by_user_userid(request_data['LMSID'])
         
+        #user detail to update the number of books borrowed
+        usercheck = UserModel.find_by_user_userid(request_data['LMSID'])
+        borrowed_book_count = issueBook.find_book_count(request_data['LMSBOOKID'])
         bookissue = issueBook(**request_data)
         try:
-            if bookissue.issue_the_book():
+            if bookissue.issueTheBook():
                 usercheck.nobookissue = user_borrow_count + 1
-                usercheck.save_to_db() 
-                return {'Message':'Book as been borrow Successfully','status':201,'c':usercheck.nobookissue},201
+                book_avaliable_check.remainingbook = borrowed_book_count + 1
+                usercheck.saveUserToDB()
+                book_avaliable_check.saveBookToDB()
+                return {'Message':'Book as been borrow Successfully','status':201},201
         except:
             return {'Message':'Internal Server Error While borrow the book','status':500},500
         

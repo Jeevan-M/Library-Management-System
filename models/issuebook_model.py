@@ -24,10 +24,14 @@ class issueBook(db_connect.Model):
         return cls.query.filter_by(userid=userid).count()
 
     @classmethod
+    def find_book_count(cls,bookid):
+        return cls.query.filter_by(bookid=bookid).count()
+    
+    @classmethod
     def borrow_status(cls,LMSBOOKID,LMSID):
         return cls.query.filter_by(bookid=LMSBOOKID).filter_by(userid=LMSID).first()
 
-    def issue_the_book(self):
+    def issueTheBook(self):
         db_connect.session.add(self)
         db_connect.session.commit()
         return True

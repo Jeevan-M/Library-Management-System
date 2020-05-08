@@ -41,8 +41,8 @@ class UserResource(Resource):
             return {'Message': f'The {request_data["Email"]} email is already exist','status':400},400
         user_register = UserModel(**request_data)
         try:
-            user_register.save_to_db()
-            return {'Message': f'Hi, {request_data["Name"]} your Registration is Successfully.....!','status':201}
+            user_register.saveUserToDB()
+            return {'Message': f'Hi, {request_data["Name"]} your Registration is Successfully.....!','status':201},201
         except:
             return {'Message':'An Internal Server Error occurred While Register the user','status':500},500
         
@@ -73,7 +73,7 @@ class UserResourceLogin(Resource):
         user_details = UserModel.find_by_user_email(request_data['Email'])
         try:    
             if user_details and check_password_hash(user_details.password ,request_data['Password']):
-                return {'Message': f'Welcome {user_details.name}.......','status':200}
+                return {'Message': f'Welcome {user_details.name}.......','status':200},200
         except:
             return {'Message':'Internal Server Error','status':500},500
         return {'Message':'Oops Login Failed....!','status':400},400

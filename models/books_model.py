@@ -11,8 +11,6 @@ class BookModel(db_connect.Model):
     totalbook = db_connect.Column(db_connect.Integer)
     remainingbook = db_connect.Column(db_connect.Integer)
 
-    
-
     def __init__(self,AuthorName,BookName,TotalBook):
         self.bookid = 'LMSBOOKID'+str(random.randrange(1111,9999))
         self.authorname = AuthorName
@@ -28,10 +26,10 @@ class BookModel(db_connect.Model):
     def find_by_bookid(cls,bookid):
         return cls.query.filter_by(bookid=bookid).first()
     
-    def delete(self):
+    def deleteBook(self):
         db_connect.session.delete(self)
         db_connect.session.commit()
  
-    def save_to_db(self):
+    def saveBookToDB(self):
         db_connect.session.add(self)
         db_connect.session.commit()

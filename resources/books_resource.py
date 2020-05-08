@@ -26,12 +26,12 @@ class BooksResource(Resource):
         if BookModel.find_by_bookname(requested_data['BookName']):
             return {'Message': f"The {requested_data['BookName']} is already stored in database Insted of adding the book increase the total count"}
         book_details = BookModel(**requested_data)
-        book_details.save_to_db()
-        return {'Message': f"The {requested_data['BookName']} is Added Successfully to DataBase....."}
+        book_details.saveBookToDB()
+        return {'Message': f"The {requested_data['BookName']} is Added Successfully to DataBase.....",'status':201},201
 
     def delete(self,name):
         book_details = BookModel.find_by_bookname(name)
         if book_details:
-            book_details.delete()
-            return {'Message':'Book deleted from the database'}
-        return {'Message':"Book Don't exist in the Database"}
+            book_details.deleteBook()
+            return {'Message':'Book deleted from the database','status':200},200
+        return {'Message':"Book Don't exist in the Database",'status':400},400
