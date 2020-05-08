@@ -19,6 +19,9 @@ class issueBook(db_connect.Model):
         self.borrow_date = datetime.date.today()
         self.return_date = datetime.date.today() + datetime.timedelta(days=10)
 
+    @classmethod
+    def find_user_count(cls,userid):
+        return cls.query.filter_by(userid=userid).count()
 
     @classmethod
     def borrow_status(cls,LMSBOOKID,LMSID):
@@ -27,3 +30,4 @@ class issueBook(db_connect.Model):
     def issue_the_book(self):
         db_connect.session.add(self)
         db_connect.session.commit()
+        return True

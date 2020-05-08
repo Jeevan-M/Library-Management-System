@@ -19,19 +19,19 @@ class BookModel(db_connect.Model):
         self.bookname = BookName
         self.totalbook = TotalBook
         self.remainingbook = 0
-    
-    def save_to_db(self):
-        db_connect.session.add(self)
-        db_connect.session.commit()
 
     @classmethod
     def find_by_bookname(cls,bookname):
         return cls.query.filter_by(bookname=bookname).first()
 
+    @classmethod
+    def find_by_bookid(cls,bookid):
+        return cls.query.filter_by(bookid=bookid).first()
+    
     def delete(self):
         db_connect.session.delete(self)
         db_connect.session.commit()
-
-
-
-    
+ 
+    def save_to_db(self):
+        db_connect.session.add(self)
+        db_connect.session.commit()
