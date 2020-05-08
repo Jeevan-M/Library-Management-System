@@ -26,7 +26,7 @@ class issueBookResource(Resource):
         
         #checking the book avaliablity 
         book_avaliable_check = BookModel.find_by_bookid(request_data['LMSBOOKID'])
-        if book_avaliable_check.totalbook == book_avaliable_check.remainingbook:
+        if book_avaliable_check.remainingbook == 0:
             return {'Message' : 'Sorry Book not Avaliable','status':400},400
         
         #check the user already borrow this book
@@ -36,15 +36,30 @@ class issueBookResource(Resource):
         #user detail to update the number of books borrowed
         usercheck = UserModel.find_by_user_userid(request_data['LMSID'])
         borrowed_book_count = issueBook.find_book_count(request_data['LMSBOOKID'])
+        if borrowed_book_count == 0:
+            borrowed_book_count = book_avaliable_check.remainingbook
         bookissue = issueBook(**request_data)
         try:
             if bookissue.issueTheBook():
                 usercheck.nobookissue = user_borrow_count + 1
-                book_avaliable_check.remainingbook = borrowed_book_count + 1
+                book_avaliable_check.remainingbook = borrowed_book_count - 1
                 usercheck.saveUserToDB()
                 book_avaliable_check.saveBookToDB()
                 return {'Message':'Book as been borrow Successfully','status':201},201
         except:
             return {'Message':'Internal Server Error While borrow the book','status':500},500
         
-    
+
+    def delete(self):
+        request_data = issueBookResource.parser.parse_args()
+        returnbook = issueBook.borrow_status(**request_data)
+        if returnbook:
+            usercheck = UserModel.find_by_user_userid(request_data['LMSID'])
+            book_avaliable_check = BookModel.find_by_bookid(request_data['LMSBOOKID'])
+            if returnbook.returnBookDelete():
+                usercheck.nobookissue -= 1
+                book_avaliable_check.remainingbook += 1 
+                usercheck.saveUserToDB()
+                book_avaliable_check.saveBookToDB()
+            return {'Message':'Book Returned Successfully','status':200}
+        return {'Message':'Uable to return Book'} 

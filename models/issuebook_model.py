@@ -35,3 +35,9 @@ class issueBook(db_connect.Model):
         db_connect.session.add(self)
         db_connect.session.commit()
         return True
+
+    def returnBookDelete(self):
+        db_connect.session.delete(self)
+        db_connect.session.commit()
+        return True
+

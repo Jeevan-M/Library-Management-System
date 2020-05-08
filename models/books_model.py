@@ -16,7 +16,7 @@ class BookModel(db_connect.Model):
         self.authorname = AuthorName
         self.bookname = BookName
         self.totalbook = TotalBook
-        self.remainingbook = 0
+        self.remainingbook = TotalBook
 
     @classmethod
     def find_by_bookname(cls,bookname):
