@@ -33,3 +33,7 @@ class BookModel(db_connect.Model):
     def saveBookToDB(self):
         db_connect.session.add(self)
         db_connect.session.commit()
+
+    def json(self):
+        return {'bookid':self.bookid,'authorname':self.authorname,'bookname':self.bookname,'totalbook':self.totalbook,'remainingbook':self.remainingbook}
+    

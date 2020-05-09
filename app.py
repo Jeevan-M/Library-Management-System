@@ -3,7 +3,7 @@ from flask_restful import Api
 from flask_cors import CORS
 from resources.users_resource import UserResource,UserResourceDetails,UserResourceLogin
 from resources.books_resource import BooksResource 
-from resources.admin_resource import AdminLoginResource
+from resources.admin_resource import AdminLoginResource,GetAllBooksAndIssuedInLibrary
 from resources.issuebook_resource import issueBookResource
 
 app = Flask(__name__)
@@ -23,6 +23,7 @@ endpoint_api.add_resource(UserResourceLogin,'/userlogin')
 endpoint_api.add_resource(BooksResource,'/insertbook')
 endpoint_api.add_resource(AdminLoginResource,'/AdminLogin')
 endpoint_api.add_resource(issueBookResource,'/issuebook')
+endpoint_api.add_resource(GetAllBooksAndIssuedInLibrary,'/getbooks/<string:value>')
 
 if __name__ == "__main__":
     from db_connection import db_connect

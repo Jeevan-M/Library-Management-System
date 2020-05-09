@@ -2,6 +2,7 @@ from models.issuebook_model import issueBook
 from models.users_model import UserModel
 from models.books_model import BookModel
 from flask_restful import Resource,reqparse
+import datetime 
 
 class issueBookResource(Resource):
     parser = reqparse.RequestParser()
@@ -18,7 +19,6 @@ class issueBookResource(Resource):
 
     def post(self):
         request_data = issueBookResource.parser.parse_args()
-        
         #find the count of borrowed book by the user
         user_borrow_count = issueBook.find_user_count(request_data['LMSID'])
         if user_borrow_count >= 10:
@@ -49,6 +49,16 @@ class issueBookResource(Resource):
         except:
             return {'Message':'Internal Server Error While borrow the book','status':500},500
         
+    
+    def put(self):
+        request_data = issueBookResource.parser.parse_args()
+        renewal_book = issueBook.borrow_status(**request_data)
+        if renewal_book:
+            renewal_book.borrow_date = datetime.date.today()
+            renewal_book.return_date = datetime.date.today() + datetime.timedelta(days=10)
+            renewal_book.issueTheBook()
+            return {'Message':'Book Renewal Successfully','status':200},200
+        return {'Message':'Book Renewal Unsuccessfully','status':400},400
 
     def delete(self):
         request_data = issueBookResource.parser.parse_args()
@@ -56,10 +66,13 @@ class issueBookResource(Resource):
         if returnbook:
             usercheck = UserModel.find_by_user_userid(request_data['LMSID'])
             book_avaliable_check = BookModel.find_by_bookid(request_data['LMSBOOKID'])
+            FineAmount = 0
+            if (returnbook.return_date - datetime.date.today()).days >0:
+                FineAmount = abs((returnbook.return_date - datetime.date.today()).days)
             if returnbook.returnBookDelete():
                 usercheck.nobookissue -= 1
                 book_avaliable_check.remainingbook += 1 
                 usercheck.saveUserToDB()
                 book_avaliable_check.saveBookToDB()
-            return {'Message':'Book Returned Successfully','status':200}
+                return {'Message':'Book Returned Successfully','status':200,'FineAmount':FineAmount}
         return {'Message':'Uable to return Book'} 
