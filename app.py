@@ -23,7 +23,7 @@ endpoint_api.add_resource(UserResourceLogin,'/userlogin')
 endpoint_api.add_resource(BooksResource,'/insertbook')
 endpoint_api.add_resource(AdminLoginResource,'/AdminLogin')
 endpoint_api.add_resource(issueBookResource,'/issuebook')
-endpoint_api.add_resource(GetAllBooksAndIssuedInLibrary,'/getbooks/<string:value>')
+endpoint_api.add_resource(GetAllBooksAndIssuedInLibrary,'/getbookanduserdetails/<string:value>')
 
 if __name__ == "__main__":
     from db_connection import db_connect

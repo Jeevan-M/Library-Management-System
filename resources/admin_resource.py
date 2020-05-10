@@ -2,7 +2,9 @@ from flask_restful import Resource,reqparse
 from models.admin_model import AdminModel
 from werkzeug.security import check_password_hash
 from models.books_model import BookModel
-
+from models.issuebook_model import issueBook
+from models.users_model import UserModel
+from db_connection import db_connect
 
 class AdminLoginResource(Resource):
     parser = reqparse.RequestParser()
@@ -33,5 +35,13 @@ class GetAllBooksAndIssuedInLibrary(Resource):
         if value == 'ALLBOOK':
             return {'AllBook':list(map(lambda book: book.json() , BookModel.query.all()))}
         elif value == 'ISSUEBOOK':
-            return 'issuebook'
-
+            # l = []
+            # for b,iss,u in db_connect.session.query(BookModel,issueBook,UserModel).join(BookModel, BookModel.bookid == issueBook.bookid).join(UserModel, UserModel.userid == issueBook.userid).all():
+            #     t = []
+            #     t.append(b.json())
+            #     t.append(u.json())
+            #     l.append(t)
+            # return l
+            return {'issuebook': [[book.json(),user.json()] for book,issuebook,user in db_connect.session.query(BookModel,issueBook,UserModel).join(BookModel, BookModel.bookid == issueBook.bookid).join(UserModel, UserModel.userid == issueBook.userid).all()]}
+        elif value == 'ALLUSER':
+            return {'AllUser':list(map(lambda user: user.json() , UserModel.query.all()))}
