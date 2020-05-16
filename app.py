@@ -17,7 +17,7 @@ def create_tables():
     db_connect.create_all()            
 
 
-endpoint_api.add_resource(UserResourceDetails,'/user/<string:userid>')
+endpoint_api.add_resource(UserResourceDetails,'/user/<string:value>,<string:userid>')
 endpoint_api.add_resource(UserResource,'/register')
 endpoint_api.add_resource(UserResourceLogin,'/userlogin')
 endpoint_api.add_resource(BooksResource,'/insertbook')

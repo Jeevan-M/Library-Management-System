@@ -24,6 +24,10 @@ class issueBook(db_connect.Model):
         return cls.query.filter_by(userid=userid).count()
 
     @classmethod
+    def find_the_userissued_book(cls,userid):
+        return cls.query.filter_by(userid=userid).all()
+
+    @classmethod
     def find_book_count(cls,bookid):
         return cls.query.filter_by(bookid=bookid).count()
     

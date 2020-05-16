@@ -1,5 +1,8 @@
 from flask_restful import Resource,reqparse
 from models.users_model import UserModel
+from models.books_model import BookModel
+from models.issuebook_model import issueBook
+from db_connection import db_connect
 from werkzeug.security import check_password_hash
 
 
@@ -48,12 +51,17 @@ class UserResource(Resource):
         
 
 class UserResourceDetails(Resource):
-        def get(self,userid):
-            user_details = UserModel.find_by_user_userid(userid)
-            if user_details:
-                return user_details.json()
-            return {'Message':'User Does not exist'},400
-        
+        def get(self,userid,value=None):
+            if value == 'USERDETAILS':    
+                user_details = UserModel.find_by_user_userid(userid)
+                if user_details:
+                    return user_details.json()
+                return {'Message':'User Does not exist'},400
+            elif value == 'USERISSUEDBOOKS':
+                allbookanduser =  [[book.json(),user.json()] for book,issuebook,user in db_connect.session.query(BookModel,issueBook,UserModel).join(BookModel, BookModel.bookid == issueBook.bookid).join(UserModel, UserModel.userid == issueBook.userid).all()]
+                return {'userissuebooks': [detail for i,detail in enumerate(allbookanduser) if detail[1].get('Userid') == userid] } 
+
+                    
 class UserResourceLogin(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument(
