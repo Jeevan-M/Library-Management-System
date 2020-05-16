@@ -29,6 +29,7 @@ class UserModel(db_connect.Model):
 
     def json(self):
         return {
+            "id" : self.id,
     "Userid":self.userid,
 	"Name":self.name,
 	"Email":self.email,	

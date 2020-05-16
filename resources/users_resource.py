@@ -73,7 +73,7 @@ class UserResourceLogin(Resource):
         user_details = UserModel.find_by_user_email(request_data['Email'])
         try:    
             if user_details and check_password_hash(user_details.password ,request_data['Password']):
-                return {'Message': f'Welcome {user_details.name}.......','status':200},200
+                return {'Message': f'Welcome {user_details.name}.......','status':200,'Userid':user_details.userid},200
         except:
             return {'Message':'Internal Server Error','status':500},500
         return {'Message':'Oops Login Failed....!','status':400},400

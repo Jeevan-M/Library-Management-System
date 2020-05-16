@@ -35,5 +35,5 @@ class BookModel(db_connect.Model):
         db_connect.session.commit()
 
     def json(self):
-        return {'bookid':self.bookid,'authorname':self.authorname,'bookname':self.bookname,'totalbook':self.totalbook,'remainingbook':self.remainingbook}
+        return {'id':self.id,    'bookid':self.bookid,'authorname':self.authorname,'bookname':self.bookname,'totalbook':self.totalbook,'remainingbook':self.remainingbook}
     

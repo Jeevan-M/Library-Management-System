@@ -24,7 +24,7 @@ class BooksResource(Resource):
     def post(self):
         requested_data = BooksResource.parser.parse_args()
         if BookModel.find_by_bookname(requested_data['BookName']):
-            return {'Message': f"The {requested_data['BookName']} is already stored in database Insted of adding the book increase the total count"}
+            return {'Message': f"The Book    {requested_data['BookName']} is already stored in database Insted of adding the book increase the total count",'status':400},400    
         book_details = BookModel(**requested_data)
         book_details.saveBookToDB()
         return {'Message': f"The {requested_data['BookName']} is Added Successfully to DataBase.....",'status':201},201
