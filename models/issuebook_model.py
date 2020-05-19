@@ -1,5 +1,8 @@
 from db_connection import db_connect
 import datetime 
+import json
+
+
 
 class issueBook(db_connect.Model):
     __tablename__ = 'issuebook'
@@ -19,6 +22,13 @@ class issueBook(db_connect.Model):
         self.borrow_date = datetime.date.today()
         self.return_date = datetime.date.today() + datetime.timedelta(days=10)
 
+    def json(self):
+        return{
+            'status' : self.status,
+            'borrow_date' :  self.borrow_date.__str__(),
+            'return_date' :  self.return_date.__str__()
+        }
+
     @classmethod
     def find_user_count(cls,userid):
         return cls.query.filter_by(userid=userid).count()
@@ -30,6 +40,8 @@ class issueBook(db_connect.Model):
     @classmethod
     def find_book_count(cls,bookid):
         return cls.query.filter_by(bookid=bookid).count()
+
+
     
     @classmethod
     def borrow_status(cls,LMSBOOKID,LMSID):

@@ -21,6 +21,7 @@ class BookModel(db_connect.Model):
     @classmethod
     def find_by_bookname(cls,bookname):
         return cls.query.filter_by(bookname=bookname).first()
+    
 
     @classmethod
     def find_by_bookid(cls,bookid):

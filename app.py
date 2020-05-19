@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
-from resources.users_resource import UserResource,UserResourceDetails,UserResourceLogin
+from resources.users_resource import UserResource,UserResourceDetails,UserResourceLogin,UserResourceUpdate
 from resources.books_resource import BooksResource 
 from resources.admin_resource import AdminLoginResource,GetAllBooksAndIssuedInLibrary
 from resources.issuebook_resource import issueBookResource
@@ -18,6 +18,7 @@ def create_tables():
 
 
 endpoint_api.add_resource(UserResourceDetails,'/user/<string:value>,<string:userid>')
+endpoint_api.add_resource(UserResourceUpdate,'/userupdate')
 endpoint_api.add_resource(UserResource,'/register')
 endpoint_api.add_resource(UserResourceLogin,'/userlogin')
 endpoint_api.add_resource(BooksResource,'/insertbook')

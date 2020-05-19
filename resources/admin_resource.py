@@ -45,3 +45,8 @@ class GetAllBooksAndIssuedInLibrary(Resource):
             return {'issuebook': [[book.json(),user.json()] for book,issuebook,user in db_connect.session.query(BookModel,issueBook,UserModel).join(BookModel, BookModel.bookid == issueBook.bookid).join(UserModel, UserModel.userid == issueBook.userid).all()]}
         elif value == 'ALLUSER':
             return {'AllUser':list(map(lambda user: user.json() , UserModel.query.all()))}
+        elif value == 'ALLUSERBOOKISSUECOUNT':
+            issuebookcount = issueBook.query.count()
+            usercount= UserModel.query.count()
+            bookcount = BookModel.query.count()
+            return {'issuebookcount':issuebookcount,'usercount':usercount,'bookcount':bookcount}

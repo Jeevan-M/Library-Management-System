@@ -19,7 +19,7 @@ class UserModel(db_connect.Model):
 
     def __init__(self,Name,Email,Type,Phone,Password):
         self.userid = 'LMSID'+str(random.randrange(1111, 9999))
-        self.name = Name
+        self.name = Name.upper()
         self.email = Email
         self.usertype = Type
         self.phone = Phone
@@ -46,6 +46,7 @@ class UserModel(db_connect.Model):
     @classmethod
     def find_by_user_userid(cls,userid):
         return cls.query.filter_by(userid=userid).first()
+
 
     def saveUserToDB(self):
         db_connect.session.add(self)
