@@ -20,11 +20,11 @@ This is a simply **Library  Management System** Project Developed using **Python
 * MySQL
 
 ## How To Run The Project
-step 1. run the xammp server
-step 2. Import the Database file location{Database\Library_DataBase.sql}
-step 3. run the app.py 
-step 4. double click this file Library-Management-System\LMS+UI\index.html {initialy the data base will be empty}
-step 5. Start using it :)
+   1. run the xammp server
+   2. Import the Database file location{Database\Library_DataBase.sql}
+   3. run the app.py 
+   4. double click this file Library-Management-System\LMS+UI\index.html {initialy the data base will be empty}
+   5. Start using it :)
 
 
 
